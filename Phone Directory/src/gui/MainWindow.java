@@ -211,7 +211,8 @@ public class MainWindow extends JFrame {
 
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
+				//dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
+				//TODO - fix me
 			}
 		});
 		btnSearch.setToolTipText("Search by Name");
