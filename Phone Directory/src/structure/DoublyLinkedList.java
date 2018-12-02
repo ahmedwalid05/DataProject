@@ -1,6 +1,6 @@
 package structure;
 
-public class DoublyLinkedList<T> {
+public class DoublyLinkedList<T extends Comparable> {
 
 	private Node<T> head;
 	private Node<T> tail;
@@ -84,5 +84,76 @@ public class DoublyLinkedList<T> {
 
 		}
 	}
+	
+	
+	public void SortAsc()
+	{
+		int swapped, i; 
+		 Node<T> ptr1=null; 
+		 Node<T> lptr = null; 	
+		if (head == null) 
+	        return; 
+		
+		do
+	    { 
+	        swapped = 0; 
+	        ptr1 = head; 
+	   
+	        while (ptr1.getNext() != lptr) 
+	        { 
+	            if (ptr1.getData().compareTo(ptr1.getNext().getData())<0) 
+	            {  
+	                swap(ptr1, ptr1.getNext()) ; 
+	                swapped = 1; 
+	            } 
+	            ptr1 = ptr1.getNext(); 
+	        } 
+	        lptr = ptr1; 
+	    } 
+	    while (swapped==1); 
+		
+		
+	}
 
+	public void SortDesc()
+	{
+		int swapped, i; 
+		 Node<T> ptr1=null; 
+		 Node<T> lptr = null; 	
+		if (head == null) 
+	        return; 
+		
+		do
+	    { 
+	        swapped = 0; 
+	        ptr1 = head; 
+	   
+	        while (ptr1.getNext() != lptr) 
+	        { 
+	            if (ptr1.getData().compareTo(ptr1.getNext().getData())>0) 
+	            {  
+	                swap(ptr1, ptr1.getNext()) ; 
+	                swapped = 1; 
+	            } 
+	            ptr1 = ptr1.getNext(); 
+	        } 
+	        lptr = ptr1; 
+	    } 
+	    while (swapped==1); 
+		
+		
+	}
+
+	
+	public void swap(Node<T> n1, Node<T> n2)
+	{
+		T a = n1.getData();
+		T b = n2.getData();
+		
+		n1.setData(b);
+		n2.setData(a);
+		
+		
+	}
+	
 }
