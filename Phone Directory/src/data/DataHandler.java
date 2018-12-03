@@ -39,8 +39,8 @@ public class DataHandler {
 		contactList.print();
 	}
 
-	public int search(String id, String name, String email, String phone) {
-	return contactList.searchStack(id, name, email, phone);
+	public Contact search(String id, String name, String email, String phone) {
+	return contactList.get(contactList.searchStack(id, name, email, phone)).getData();
 	
 	
 	}

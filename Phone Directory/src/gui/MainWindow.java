@@ -236,7 +236,7 @@ public class MainWindow extends JFrame {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				int row = dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
+				Contact contact = dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
 
 				notifydataSetchanged();
 				//TODO - Output the value
