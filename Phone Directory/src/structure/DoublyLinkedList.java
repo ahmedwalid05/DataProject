@@ -1,5 +1,7 @@
 package structure;
 
+import data.Contact;
+
 public class DoublyLinkedList<T extends Comparable> {
 
 	private Node<T> head;
@@ -44,16 +46,16 @@ public class DoublyLinkedList<T extends Comparable> {
 		}
 		return counter;
 	}
-	
-	 public int sumElement() {
-		 Node<T> e =head;
-		 int sum=0;
-		 while(e!=null) {
+
+	public int sumElement() {
+		Node<T> e =head;
+		int sum=0;
+		while(e!=null) {
 			sum+=(int)e.getData();
 			e=e.getNext();
-		 }			 
-		 return sum;
-	 }	
+		}			 
+		return sum;
+	}	
 
 
 
@@ -75,7 +77,6 @@ public class DoublyLinkedList<T extends Comparable> {
 		return (found)?e:null;
 	}
 
-
 	public void print() {
 		Node<T> e=head;
 		while(e!=null) {
@@ -84,76 +85,109 @@ public class DoublyLinkedList<T extends Comparable> {
 
 		}
 	}
-	
-	
+
+
 	public void SortAsc()
 	{
 		int swapped, i; 
-		 Node<T> ptr1=null; 
-		 Node<T> lptr = null; 	
+		Node<T> ptr1=null; 
+		Node<T> lptr = null; 	
 		if (head == null) 
-	        return; 
-		
+			return; 
+
 		do
-	    { 
-	        swapped = 0; 
-	        ptr1 = head; 
-	   
-	        while (ptr1.getNext() != lptr) 
-	        { 
-	            if (ptr1.getData().compareTo(ptr1.getNext().getData())<0) 
-	            {  
-	                swap(ptr1, ptr1.getNext()) ; 
-	                swapped = 1; 
-	            } 
-	            ptr1 = ptr1.getNext(); 
-	        } 
-	        lptr = ptr1; 
-	    } 
-	    while (swapped==1); 
-		
-		
+		{ 
+			swapped = 0; 
+			ptr1 = head; 
+
+			while (ptr1.getNext() != lptr) 
+			{ 
+				if (ptr1.getData().compareTo(ptr1.getNext().getData())<0) 
+				{  
+					swap(ptr1, ptr1.getNext()) ; 
+					swapped = 1; 
+				} 
+				ptr1 = ptr1.getNext(); 
+			} 
+			lptr = ptr1; 
+		} 
+		while (swapped==1); 
+
+
 	}
 
 	public void SortDesc()
 	{
 		int swapped, i; 
-		 Node<T> ptr1=null; 
-		 Node<T> lptr = null; 	
+		Node<T> ptr1=null; 
+		Node<T> lptr = null; 	
 		if (head == null) 
-	        return; 
-		
+			return; 
+
 		do
-	    { 
-	        swapped = 0; 
-	        ptr1 = head; 
-	   
-	        while (ptr1.getNext() != lptr) 
-	        { 
-	            if (ptr1.getData().compareTo(ptr1.getNext().getData())>0) 
-	            {  
-	                swap(ptr1, ptr1.getNext()) ; 
-	                swapped = 1; 
-	            } 
-	            ptr1 = ptr1.getNext(); 
-	        } 
-	        lptr = ptr1; 
-	    } 
-	    while (swapped==1); 
-		
-		
+		{ 
+			swapped = 0; 
+			ptr1 = head; 
+
+			while (ptr1.getNext() != lptr) 
+			{ 
+				if (ptr1.getData().compareTo(ptr1.getNext().getData())>0) 
+				{  
+					swap(ptr1, ptr1.getNext()) ; 
+					swapped = 1; 
+				} 
+				ptr1 = ptr1.getNext(); 
+			} 
+			lptr = ptr1; 
+		} 
+		while (swapped==1); 
+
+
 	}
 
-	
+
 	public void swap(Node<T> n1, Node<T> n2)
 	{
 		T a = n1.getData();
 		T b = n2.getData();
-		
+
 		n1.setData(b);
 		n2.setData(a);
-		
-		
+
+
 	}
-	
+	public int searchStack(String...data) {
+		Stack<String> stack = new Stack<String>();		
+		Node node = head;
+		Stack<String> contactDataStack;
+		int counter =0;
+		do{
+			
+			contactDataStack=((Contact)node.getData()).dataAsStack();
+			contactDataStack.print();
+			for (int i = 0; i < data.length; i++) {
+				stack.push(data[i]);	
+			}
+			stack.print();
+			while(contactDataStack.peek()!=null) {
+				
+				String passedItem = stack.pop();
+				String contactItem= contactDataStack.pop();
+				System.out.println("Comparing: "+passedItem+" With: "+contactItem);
+				if(passedItem.equals(contactItem) || passedItem.equals("")) {
+					
+				}else {
+					break;
+				}
+				if(contactDataStack.peek()==null) {
+					return counter;
+				}
+
+			}
+			counter++;
+		}while((node=node.getNext())!=null);
+
+		return -1;
+	}
+
 }

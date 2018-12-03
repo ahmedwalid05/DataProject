@@ -1,6 +1,8 @@
 package data;
 
-public class Contact {
+import structure.Stack;
+
+public class Contact implements Comparable {
 
 	public Contact(int id, String name, String email, int number, int countryCode) {
 		super();
@@ -49,6 +51,23 @@ public class Contact {
 	public String toString() {
 		return "Contact [id=" + id + ", name=" + name + ", email=" + email + ", number=" + number + "]";
 	}
+	@Override
+	public int compareTo(Object arg0) {
+		if(arg0 instanceof Contact) {
+			return (((Contact)arg0).getName()).compareTo(getName());
+		}
+		throw new IllegalArgumentException("Pass a Comparable Object");
 
-	
+	}
+	public Stack dataAsStack() {
+		Stack<String> stack = new Stack<>();
+		stack.push(id+"");
+		stack.push(name);
+		stack.push(email);
+		stack.push(number+"");
+		
+		return stack;
+	}
+
+
 }

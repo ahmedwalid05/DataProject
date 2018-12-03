@@ -26,20 +26,7 @@ public class DataHandler {
 		}
 		return objects;
 	}
-
-	public int searchStack(String...data) {
-		Stack<String> stack = new Stack<String>();		
-		for (int i = 0; i < data.length; i++) {
-			stack.push(data[i]);	
-		}
-		stack.print();
-		String popedItem;
-		while((popedItem = stack.pop())!=null) {
-			//TODO Search function idk
-		}
-
-		return 0;
-	}
+	
 	
 	public void deleteContact(int postion) {
 		contactList.delete(postion);
@@ -50,5 +37,17 @@ public class DataHandler {
 	}
 	public void print() {
 		contactList.print();
+	}
+
+	public int search(String id, String name, String email, String phone) {
+	return contactList.searchStack(id, name, email, phone);
+	
+	
+	}
+	public void SortAsc() {
+		contactList.SortAsc();
+	}
+	public void SortDesc() {
+		contactList.SortDesc();
 	}
 }

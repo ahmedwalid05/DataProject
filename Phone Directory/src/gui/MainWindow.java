@@ -38,14 +38,27 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.JScrollPane;
 import data.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.Choice;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class MainWindow extends JFrame {
 
@@ -61,8 +74,8 @@ public class MainWindow extends JFrame {
 	 */
 	private static DataHandler dataHandler = new DataHandler();
 	public static void main(String[] args) {
-		dataHandler.addContact(new Contact(1,"Ahmed Walid Massoud","ahmedwalid05@gmail.com",70560364,974));
-		dataHandler.addContact(new Contact(2,"Walid Ahmed Massoud","am1703929@qu.edu.qa",70560212,974));
+		dataHandler.addContact(new Contact(1,"Ahmed","ahm@gmail.com",0364,974));
+		dataHandler.addContact(new Contact(2,"Walid","am@qu.edu.qa",0212,974));
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -83,12 +96,12 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		setTitle("Phone Directory ");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 583, 482);
+		setBounds(100, 100, 635, 482);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		contentPane = new JPanel();
@@ -168,30 +181,41 @@ public class MainWindow extends JFrame {
 		phoneField.setColumns(10);
 
 
-
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					int id =0;
+					int phoneNum = 0;
+					try {
+						id = Integer.parseInt(idField.getText());	
+					} catch (Exception e) {
+						System.out.println("Id = 0");
+					}
+					try {
+						phoneNum = Integer.parseInt(phoneField.getText());	
+					} catch (Exception e) {
+						System.out.println("Phone Number = 0");
+					}
 
-
-					dataHandler.addContact(new Contact(Integer.parseInt(idField.getText()),
+					dataHandler.addContact(new Contact(id,
 							nameField.getText(),
 							emailField.getText(),
-							Integer.parseInt(phoneField.getText()) ,
+							phoneNum,
 							974));
 					notifydataSetchanged();
 					idField.setText("");
 					nameField.setText("");
 					emailField.setText("");
 					phoneField.setText("");
+					dataHandler.print();
 				} catch (Exception e) {
-					// TODO: handle exception
+					e.printStackTrace();
 				}
 
 			}
 		});
-		btnAdd.setBounds(467, 11, 89, 23);
+		btnAdd.setBounds(459, 11, 148, 23);
 		contentPane.add(btnAdd);
 
 		JButton btnDelete = new JButton("Delete");
@@ -204,15 +228,18 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		btnDelete.setBounds(467, 55, 89, 23);
+		btnDelete.setBounds(459, 45, 148, 23);
 		contentPane.add(btnDelete);
 
 		JButton btnSearch = new JButton("Search");
 
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
-				//TODO - fix me
+
+				int row = dataHandler.search(idField.getText(), nameField.getText(), emailField.getText(), phoneField.getText());
+
+				notifydataSetchanged();
+				//TODO - Output the value
 			}
 		});
 		btnSearch.setToolTipText("Search by Name");
@@ -221,7 +248,7 @@ public class MainWindow extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		scrollPane.setBounds(10, 123, 544, 309);
+		scrollPane.setBounds(10, 123, 597, 309);
 
 		contentPane.add(scrollPane);
 
@@ -236,6 +263,14 @@ public class MainWindow extends JFrame {
 				return columnTypes[columnIndex];
 			}
 		});
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel()) {
+			@Override
+			public boolean isSortable(int column) {
+				return false;
+			}
+		};
+		table.setRowSorter(sorter);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.getColumnModel().getColumn(0).setPreferredWidth(1);
 		table.getColumnModel().getColumn(1).setPreferredWidth(100);
 		table.getColumnModel().getColumn(2).setPreferredWidth(136);
@@ -250,16 +285,42 @@ public class MainWindow extends JFrame {
 
 			@Override
 			public void tableChanged(TableModelEvent e) {
-
-				Contact contact = dataHandler.get(table.getSelectedRow());
-				contact.setId((int)table.getValueAt(table.getSelectedRow(), 0));
-				contact.setName(table.getValueAt(table.getSelectedRow(), 1).toString());
-				contact.setEmail(table.getValueAt(table.getSelectedRow(), 2).toString());
-				contact.setNumber((int)table.getValueAt(table.getSelectedRow(), 3));
+				if(table.getSelectedRow()!=-1) {
+					Contact contact = dataHandler.get(table.getSelectedRow());
+					contact.setId((int)table.getValueAt(table.getSelectedRow(), 0));
+					contact.setName(table.getValueAt(table.getSelectedRow(), 1).toString());
+					contact.setEmail(table.getValueAt(table.getSelectedRow(), 2).toString());
+					contact.setNumber((int)table.getValueAt(table.getSelectedRow(), 3));
+				}
 			}
 		});
 
 		scrollPane.setViewportView(table);
+
+		Choice choiceSort = new Choice();
+
+		choiceSort.setBounds(459, 92, 89, 20);
+		choiceSort.add("Ascending");
+		choiceSort.add("Descending");
+
+
+		contentPane.add(choiceSort);
+
+		JButton btnSort = new JButton("Sort");
+		btnSort.setToolTipText("Sorts by Name");
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if(choiceSort.getSelectedItem().equals("Ascending")) {
+					dataHandler.SortAsc();
+				}else if(choiceSort.getSelectedItem().equals("Descending")) {
+					dataHandler.SortDesc();
+				}
+				notifydataSetchanged();
+			}
+		});
+		btnSort.setBounds(554, 89, 53, 23);
+		contentPane.add(btnSort);
 
 
 
@@ -269,5 +330,4 @@ public class MainWindow extends JFrame {
 		((DefaultTableModel)table.getModel()).setDataVector(dataHandler.getDataAsTwoArray(), columnNames);
 		((DefaultTableModel)table.getModel()).fireTableDataChanged();
 	}
-
 }

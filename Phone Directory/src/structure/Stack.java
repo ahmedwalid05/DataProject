@@ -1,10 +1,10 @@
 package structure;
 
 public class Stack <T>{
-	
+
 	private int top;
 	private T items[];
-	
+
 	public Stack() {
 		items = (T[])new Object[10];
 		top =-1;
@@ -16,24 +16,28 @@ public class Stack <T>{
 				tempArr[i]= items[i];
 			}
 			items=tempArr;
-			
+
 		}
 		items[++top]=item;
-		
+
 	}
 	public T pop() {
 		return (top==-1)?null:items[top--];
-		
+
 	}
 	public T peek() {
-		return items[top];
+		if(top==-1)
+			return null;
+		else
+			return items[top];
 	}
 	public void print() {
 		System.out.print("[");
 		for (int i = 0; i <= top; i++) 
 			System.out.print(items[i]+",");
 		System.out.print("]\n");
-		
+
 	}
+
 
 }
